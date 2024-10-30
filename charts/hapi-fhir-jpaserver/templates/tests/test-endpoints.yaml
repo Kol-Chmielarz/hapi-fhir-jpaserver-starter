@@ -41,7 +41,7 @@ spec:
       resources:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      livenessProbe:
+pip install       livenessProbe:
         exec:
           command: ["true"]
       readinessProbe:
