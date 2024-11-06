@@ -146,9 +146,9 @@ hapi:
     #   use_apache_address_strategy_https: false
     ### enables the server to overwrite defaults on HTML, css, etc. under the url pattern of eg. /content/custom **
     ### Folder with custom content MUST be named custom. If omitted then default content applies
-/Users/kolchmielarz/Desktop/LVAD/hapi-fhir-jpaserver-starter/custom/
-├── welcome.html
-└── logo.jpg
+#/Users/kolchmielarz/Desktop/LVAD/hapi-fhir-jpaserver-starter/custom/
+#├── welcome.html
+#└── logo.jpg
     #custom_content_path: ./custom
     ### enables the server host custom content. If e.g. the value ./configs/app is supplied then the content
     ### will be served under /web/app
