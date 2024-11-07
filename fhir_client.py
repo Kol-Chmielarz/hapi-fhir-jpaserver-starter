@@ -61,7 +61,7 @@ def clear_all_patients():
 # Run example CRUD operations
 if __name__ == "__main__":
     # CREATE: Add a test patient
-    created_patient = create_patient("Schillinger", "Kody", "Female", "2002-01-01")
+    created_patient = create_patient("Schillinger", "Kody", "female", "2002-01-01")
     
     # READ: Retrieve the patient by family name
     retrieved_patient = get_patient_by_family_name("Schillinger")
