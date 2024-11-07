@@ -50,6 +50,7 @@ def delete_patient(patient):
     patient.delete()
     print("Deleted Patient with ID:", patient.id)
 
+# DELETE ALL: Function to delete all patients
 def clear_all_patients():
     patients = client.resources("Patient").fetch_all()
     for patient in patients:
@@ -65,13 +66,10 @@ if __name__ == "__main__":
     # READ: Retrieve the patient by family name
     retrieved_patient = get_patient_by_family_name("Schillinger")
 
-    # UPDATE: Update the patient's family name
-    #if retrieved_patient:
-     #   updated_patient = update_patient(retrieved_patient, "Smith")
-    
-    # DELETE: Delete the patient
-    #if updated_patient:
-    #    delete_patient(updated_patient)
+    # Uncomment if you want to update and delete specific patients
+    # if retrieved_patient:
+    #     updated_patient = update_patient(retrieved_patient, "Smith")
+    #     delete_patient(updated_patient)
 
- # CLEAR ALL: Delete all patients
+    # CLEAR ALL: Delete all patients
     #clear_all_patients()
