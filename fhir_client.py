@@ -60,18 +60,18 @@ def clear_all_patients():
 # Run example CRUD operations
 if __name__ == "__main__":
     # CREATE: Add a test patient
-    created_patient = create_patient("Doe", "John", "male", "1985-01-01")
+    created_patient = create_patient("Schillinger", "Kody", "Female", "2002-01-01")
     
     # READ: Retrieve the patient by family name
-    retrieved_patient = get_patient_by_family_name("Doe")
+    retrieved_patient = get_patient_by_family_name("Schillinger")
 
     # UPDATE: Update the patient's family name
-    if retrieved_patient:
-        updated_patient = update_patient(retrieved_patient, "Smith")
+    #if retrieved_patient:
+     #   updated_patient = update_patient(retrieved_patient, "Smith")
     
     # DELETE: Delete the patient
-    if updated_patient:
-        delete_patient(updated_patient)
+    #if updated_patient:
+    #    delete_patient(updated_patient)
 
  # CLEAR ALL: Delete all patients
-    clear_all_patients()
+    #clear_all_patients()
