@@ -59,9 +59,9 @@ if __name__ == "__main__":
     retrieved_patient = get_patient_by_family_name("Doe")
 
     # UPDATE: Update the patient's family name
-    #if retrieved_patient:
-    #    updated_patient = update_patient(retrieved_patient, "Smith")
+    if retrieved_patient:
+        updated_patient = update_patient(retrieved_patient, "Smith")
     
     # DELETE: Delete the patient
-    #if updated_patient:
-    #    delete_patient(updated_patient)
+    if updated_patient:
+        delete_patient(updated_patient)
