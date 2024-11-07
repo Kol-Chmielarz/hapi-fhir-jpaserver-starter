@@ -6,7 +6,7 @@ import base64
 # Load environment variables from the .env file
 load_dotenv()
 
-# Define your FHIR server configuration
+# Define FHIR server configuration
 FHIR_SERVER_URL = os.getenv("FHIR_SERVER_URL", "http://localhost:8080/fhir")
 FHIR_USERNAME = os.getenv("FHIR_USERNAME", "your-username")
 FHIR_PASSWORD = os.getenv("FHIR_PASSWORD", "your-password")
@@ -20,7 +20,7 @@ client = SyncFHIRClient(
     extra_headers={"Authorization": f"Basic {auth_token}"}
 )
 
-# Function to create a new patient
+# CREATE: Function to create a new patient
 def create_patient(family_name, given_name, gender, birth_date):
     new_patient = client.resource(
         "Patient",
@@ -29,19 +29,39 @@ def create_patient(family_name, given_name, gender, birth_date):
         birthDate=birth_date
     )
     new_patient.save()
+    print("Created Patient:", new_patient)
     return new_patient
 
-# Function to retrieve a patient by family name
+# READ: Function to retrieve a patient by family name
 def get_patient_by_family_name(family_name):
     patient = client.resources("Patient").search(family=family_name).first()
+    print("Retrieved Patient:", patient)
     return patient
 
-# Run example to create and then retrieve a patient
-if __name__ == "__main__":
-    # Create a test patient
-    created_patient = create_patient("Doe", "John", "male", "1985-01-01")
-    print("Created Patient:", created_patient)
+# UPDATE: Function to update a patient's information
+def update_patient(patient, new_family_name):
+    patient["name"][0]["family"] = new_family_name
+    patient.save()
+    print("Updated Patient:", patient)
+    return patient
 
-    # Retrieve the patient by family name
-    patient = get_patient_by_family_name("Doe")
-    print("Retrieved Patient:", patient)
+# DELETE: Function to delete a patient
+def delete_patient(patient):
+    patient.delete()
+    print("Deleted Patient with ID:", patient.id)
+
+# Run example CRUD operations
+if __name__ == "__main__":
+    # CREATE: Add a test patient
+    created_patient = create_patient("Doe", "John", "male", "1985-01-01")
+    
+    # READ: Retrieve the patient by family name
+    retrieved_patient = get_patient_by_family_name("Doe")
+
+    # UPDATE: Update the patient's family name
+    if retrieved_patient:
+        updated_patient = update_patient(retrieved_patient, "Smith")
+    
+    # DELETE: Delete the patient
+    if updated_patient:
+        delete_patient(updated_patient)
