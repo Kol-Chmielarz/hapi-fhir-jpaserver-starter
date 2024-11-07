@@ -80,8 +80,8 @@ if __name__ == "__main__":
     retrieved_patient = get_patient_by_family_name("Davis")
 
     # Uncomment if you want to update and delete specific patients
-    # if retrieved_patient:
-    #     updated_patient = update_patient(retrieved_patient, "Smith")
+    #if retrieved_patient:
+    #    updated_patient = update_patient(retrieved_patient, "Smith")
     #     delete_patient(updated_patient)
 
     # CLEAR ALL: Delete all patients
