@@ -72,10 +72,12 @@ def clear_all_patients():
 # Run example CRUD operations
 if __name__ == "__main__":
     # CREATE: Add a test patient
-    created_patient = create_patient("Schillinger", "Kody", "female", "2002-01-01")
+    created_patient = create_patient("Davis", "Logan", "female", "2003-01-01")
+    created_patient = create_patient("Mary", "Beth", "female", "2002-02-02")
+    created_patient = create_patient("Doe", "John", "male", "2001-03-03")
     
     # READ: Retrieve the patient by family name
-    retrieved_patient = get_patient_by_family_name("Schillinger")
+    retrieved_patient = get_patient_by_family_name("Davis")
 
     # Uncomment if you want to update and delete specific patients
     # if retrieved_patient:
