@@ -33,9 +33,20 @@ def create_patient(family_name, given_name, gender, birth_date):
     return new_patient
 
 # READ: Function to retrieve a patient by family name
+# READ: Function to retrieve a patient by family name and print detailed info
 def get_patient_by_family_name(family_name):
     patient = client.resources("Patient").search(family=family_name).first()
-    print("Retrieved Patient:", patient)
+    
+    if patient:
+        # Print basic information about the patient
+        print("Retrieved Patient:")
+        print("ID:", patient.id)
+        print("Name:", " ".join(patient["name"][0]["given"]) + " " + patient["name"][0]["family"])
+        print("Gender:", patient.get("gender", "N/A"))
+        print("Birth Date:", patient.get("birthDate", "N/A"))
+    else:
+        print("No patient found with family name:", family_name)
+    
     return patient
 
 # UPDATE: Function to update a patient's information
