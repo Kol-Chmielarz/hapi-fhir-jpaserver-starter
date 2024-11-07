@@ -50,6 +50,13 @@ def delete_patient(patient):
     patient.delete()
     print("Deleted Patient with ID:", patient.id)
 
+def clear_all_patients():
+    patients = client.resources("Patient").fetch_all()
+    for patient in patients:
+        patient.delete()
+        print("Deleted Patient with ID:", patient.id)
+    print("All patients have been deleted.")
+
 # Run example CRUD operations
 if __name__ == "__main__":
     # CREATE: Add a test patient
@@ -65,3 +72,6 @@ if __name__ == "__main__":
     # DELETE: Delete the patient
     if updated_patient:
         delete_patient(updated_patient)
+
+ # CLEAR ALL: Delete all patients
+    clear_all_patients()
