@@ -21,9 +21,15 @@ client = SyncFHIRClient(
 )
 
 # CREATE: Function to create a new patient
-def create_patient(family_name, given_name, gender, birth_date):
+def create_patient(mrn, patient_id, family_name, given_name, gender, birth_date):
     new_patient = client.resource(
         "Patient",
+        # MRN and Patient ID as identifiers
+        identifier=[
+            {"system": "http://hospital.org/mrn", "value": mrn},  # MRN
+            {"system": "http://hospital.org/patient-id", "value": patient_id}  # Patient ID
+        ],
+        # Basic patient information
         name=[{"use": "official", "family": family_name, "given": [given_name]}],
         gender=gender,
         birthDate=birth_date
@@ -34,18 +40,20 @@ def create_patient(family_name, given_name, gender, birth_date):
 
 # READ: Function to retrieve a patient by family name
 # READ: Function to retrieve a patient by family name and print detailed info
-def get_patient_by_family_name(family_name):
-    patient = client.resources("Patient").search(family=family_name).first()
+# READ: Function to retrieve a patient by MRN and print detailed info
+def get_patient_by_mrn(mrn):
+    patient = client.resources("Patient").search(identifier=mrn).first()
     
     if patient:
-        # Print basic information about the patient
         print("Retrieved Patient:")
+        print("MRN:", mrn)
         print("ID:", patient.id)
+        print("Patient ID:", next((id["value"] for id in patient["identifier"] if id["system"] == "http://hospital.org/patient-id"), "N/A"))
         print("Name:", " ".join(patient["name"][0]["given"]) + " " + patient["name"][0]["family"])
         print("Gender:", patient.get("gender", "N/A"))
         print("Birth Date:", patient.get("birthDate", "N/A"))
     else:
-        print("No patient found with family name:", family_name)
+        print("No patient found with MRN:", mrn)
     
     return patient
 
@@ -71,13 +79,18 @@ def clear_all_patients():
 
 # Run example CRUD operations
 if __name__ == "__main__":
-    # CREATE: Add a test patient
-    created_patient = create_patient("Davis", "Logan", "female", "2003-01-01")
-    created_patient = create_patient("Mary", "Beth", "female", "2002-02-02")
-    created_patient = create_patient("Doe", "John", "male", "2001-03-03")
+    # CREATE: Add a test patient with MRN and patient ID
+    created_patient = create_patient(
+        mrn="12345",
+        patient_id="STX67890",
+        family_name="Patient",
+        given_name="Test",
+        gender="male",
+        birth_date="1985-01-01"
+    )
     
-    # READ: Retrieve the patient by family name
-    retrieved_patient = get_patient_by_family_name("Davis")
+    # READ: Retrieve the patient by MRN
+    get_patient_by_mrn("12345")
 
     # Uncomment if you want to update and delete specific patients
     #if retrieved_patient:
