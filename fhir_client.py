@@ -24,10 +24,10 @@ client = SyncFHIRClient(
     extra_headers={"Authorization": f"Basic {auth_token}"}
 )
 
-# CREATE: Function to create a new patient
+# CREATE: Function to create a new Patient
 def create_patient(mrn, patient_id, family_name, given_name, gender="unknown", birth_date="1900-01-01"):
     """
-    Create a new patient in the FHIR server.
+    Create a new Patient in the FHIR server.
     """
     new_patient = client.resource(
         "Patient",
@@ -43,10 +43,10 @@ def create_patient(mrn, patient_id, family_name, given_name, gender="unknown", b
     print("Created Patient:", new_patient)
     return new_patient
 
-# READ: Function to retrieve a patient by MRN
+# READ: Function to retrieve a Patient by MRN
 def get_patient_by_mrn(mrn):
     """
-    Retrieve a patient from the FHIR server by MRN.
+    Retrieve a Patient from the FHIR server by MRN.
     """
     patient = client.resources("Patient").search(identifier=mrn).first()
     if patient:
@@ -57,32 +57,32 @@ def get_patient_by_mrn(mrn):
         print("Gender:", patient.get("gender", "N/A"))
         print("Birth Date:", patient.get("birthDate", "N/A"))
     else:
-        print("No patient found with MRN:", mrn)
+        print("No Patient found with MRN:", mrn)
     return patient
 
-# FETCH: Function to retrieve patient details from DICOM server
+# FETCH: Function to retrieve Patient details from DICOM server
 def get_patient_from_dicom(study_id):
     """
-    Fetch patient details (name, birthdate) from the DICOM server.
+    Fetch Patient details (name, birthdate) from the DICOM server.
     """
     try:
-        response = requests.get(f"{DICOM_SERVER_URL}/dicom/{study_id}/patient")
+        response = requests.get(f"{DICOM_SERVER_URL}/dicom/{study_id}/Patient")
         response.raise_for_status()
         data = response.json()
         print("Retrieved Patient from DICOM:", data)
         return data
     except requests.RequestException as e:
-        print("Error fetching patient from DICOM server:", e)
+        print("Error fetching Patient from DICOM server:", e)
         return None
 
-# CREATE FROM DICOM: Function to create a new patient using DICOM data
+# CREATE FROM DICOM: Function to create a new Patient using DICOM data
 def create_patient_from_dicom(study_id, mrn, patient_id):
     """
-    Create a new patient in the FHIR server using data from the DICOM server.
+    Create a new Patient in the FHIR server using data from the DICOM server.
     """
     dicom_patient = get_patient_from_dicom(study_id)
     if not dicom_patient:
-        print("Failed to create patient from DICOM data.")
+        print("Failed to create Patient from DICOM data.")
         return None
 
     return create_patient(
@@ -94,39 +94,36 @@ def create_patient_from_dicom(study_id, mrn, patient_id):
         birth_date=dicom_patient.get("birthdate", "1900-01-01")
     )
 
-# DELETE: Function to delete a patient
+# DELETE: Function to delete a Patient
 def delete_patient(patient):
     """
-    Delete a specific patient from the FHIR server.
+    Delete a specific Patient from the FHIR server.
     """
     patient.delete()
     print("Deleted Patient with ID:", patient.id)
 
-# CLEAR ALL: Function to delete all patients
+# CLEAR ALL: Function to delete all Patients
 def clear_all_patients():
     """
-    Clear all patients from the FHIR server.
+    Clear all Patients from the FHIR server.
     """
     patients = client.resources("Patient").fetch_all()
     for patient in patients:
         patient.delete()
         print("Deleted Patient with ID:", patient.id)
-    print("All patients have been deleted.")
+    print("All Patients have been deleted.")
 
-    import requests
-
-DICOM_SERVER_URL = "http://localhost:8000"
-
+# DICOM Functions for Studies and Series
 def get_studies_by_mrn(mrn):
     """
-    Retrieve studies for a patient by MRN from Orthanc.
+    Retrieve Studies for a Patient by MRN from Orthanc.
     """
-    url = f"{DICOM_SERVER_URL}/patients"
+    url = f"{DICOM_SERVER_URL}/Patients"
     response = requests.get(url)
     if response.status_code == 200:
         patients = response.json()
         for patient_id in patients:
-            patient_details = requests.get(f"{DICOM_SERVER_URL}/patients/{patient_id}").json()
+            patient_details = requests.get(f"{DICOM_SERVER_URL}/Patients/{patient_id}").json()
             if patient_details["MainDicomTags"]["PatientID"] == mrn:
                 studies = patient_details.get("Studies", [])
                 return studies
@@ -135,9 +132,9 @@ def get_studies_by_mrn(mrn):
 
 def get_series_by_study(study_id):
     """
-    Retrieve series for a specific study from Orthanc.
+    Retrieve Series for a specific Study from Orthanc.
     """
-    url = f"{DICOM_SERVER_URL}/studies/{study_id}/series"
+    url = f"{DICOM_SERVER_URL}/Studies/{study_id}/Series"
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
@@ -145,7 +142,7 @@ def get_series_by_study(study_id):
 
 # Example operations
 if __name__ == "__main__":
-    # Example: Create a patient using DICOM data
+    # Example: Create a Patient using DICOM data
     study_id = "STUDY12345"
     created_patient = create_patient_from_dicom(
         study_id=study_id,
@@ -153,9 +150,9 @@ if __name__ == "__main__":
         patient_id="PID67890"
     )
 
-    # Retrieve the patient by MRN
+    # Retrieve the Patient by MRN
     if created_patient:
         get_patient_by_mrn("MRN12345")
 
-    # Uncomment to clear all patients
+    # Uncomment to clear all Patients
     # clear_all_patients()
